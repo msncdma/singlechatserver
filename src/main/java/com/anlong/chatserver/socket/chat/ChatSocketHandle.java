@@ -44,22 +44,31 @@ public class ChatSocketHandle extends IoHandlerAdapter {
 			Utils.getResponse(baseRequest, response, CodeConstants.BCODE_1010);
 			OnlineUserManage manage = OnlineUserManage.getManage();
 			// 在线用户
-			OnlineUser onlineUser = manage.getOnlineUser(baseRequest.getUid(), baseRequest.getApId());
+			OnlineUser onlineUser = manage.getOnlineUser(baseRequest.getUid(),
+					baseRequest.getApId());
 
 			// 如果不是101登录请求或者104更改密码请求，则返回错误
-			if (baseRequest.getbCode() == CodeConstants.BCODE_101 || baseRequest.getbCode() == CodeConstants.BCODE_104) {
+			if (baseRequest.getbCode() == CodeConstants.BCODE_101
+					|| baseRequest.getbCode() == CodeConstants.BCODE_104) {
 				onlineUser = new OnlineUser();
 				onlineUser.setSession(session);
 			} else if (onlineUser == null) {
 				// 如果在离线列表并且密钥正确,则激活在线
-				OnlineUser offlineUser = manage.getOfflineUser(baseRequest.getUid(), baseRequest.getApId());
-				if (offlineUser != null && Utils.equals(offlineUser.getKey(), baseRequest.getKey())) {
+				OnlineUser offlineUser = manage.getOfflineUser(
+						baseRequest.getUid(), baseRequest.getApId());
+				if (offlineUser != null
+						&& Utils.equals(offlineUser.getKey(),
+								baseRequest.getKey())) {
 					onlineUser = offlineUser;
-					manage.moveOfflineUserToOnlineuserMap(baseRequest.getUid(), baseRequest.getApId(), session);
+					manage.moveOfflineUserToOnlineuserMap(baseRequest.getUid(),
+							baseRequest.getApId(), session);
 				} else {
 					// 判断是否外部管理员帐号
-					OnlineUser oaManager = manage.getOaOnlineUserByGuid(baseRequest.getUid());
-					if (oaManager != null && Utils.equals(oaManager.getKey(), baseRequest.getKey())) {
+					OnlineUser oaManager = manage
+							.getOaOnlineUserByGuid(baseRequest.getUid());
+					if (oaManager != null
+							&& Utils.equals(oaManager.getKey(),
+									baseRequest.getKey())) {
 						onlineUser = oaManager;
 					} else {
 						response.setRtCode(CodeConstants.RTCODE_105);
@@ -76,7 +85,9 @@ public class ChatSocketHandle extends IoHandlerAdapter {
 
 			// 存在错误码时,不进行逻辑处理, 直接返回错误
 			if (Utils.equals(response.getRtCode(), CodeConstants.RTCODE_0)) {
-				SuperBiz biz = (SuperBiz) SpringUtil.getBean(StaticValue.SPRING_BUSINESS_PREFIX + baseRequest.getbCode());
+				SuperBiz biz = (SuperBiz) SpringUtil
+						.getBean(StaticValue.SPRING_BUSINESS_PREFIX
+								+ baseRequest.getbCode());
 				biz.execute(baseRequest, onlineUser);
 			} else {
 				System.out.println(response.toString());

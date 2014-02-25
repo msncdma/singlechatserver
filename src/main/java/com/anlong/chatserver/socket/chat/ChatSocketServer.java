@@ -22,7 +22,7 @@ public class ChatSocketServer implements Runnable {
 		try {
 			int port = SystemGlobals.getIntValue("anlongs.im.chat.port", 3001);
 			acceptor.bind(new InetSocketAddress(port));
-			System.out.println("socket start.........");
+			System.out.println("socket start.........bind port:"+port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

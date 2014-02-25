@@ -114,6 +114,12 @@
 			<groupId>javax.javaee</groupId>
 			<artifactId>javaee</artifactId>
 			<version>6.0-alpha-1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.fernandospr</groupId>
@@ -136,9 +142,9 @@
 			<version>2.1</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.faces</groupId>
+			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
-			<version>1.2-NIGHTLY_20060227</version>
+			<version>2.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>jstl</groupId>
